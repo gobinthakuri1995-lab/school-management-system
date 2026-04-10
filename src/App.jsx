@@ -8,31 +8,22 @@ import Unauthorized from './pages/Unauthorized';
 import AdminPanel from './pages/AdminPanel';
 import Dashboard from './pages/Dashboard';
 
+import Layout from './components/Layout';
+
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
       
-      {/* Shared Dashboard Entry */}
-      <Route 
-        path="/" 
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } 
-      />
-
-      {/* Admin/Owner Only */}
-      <Route 
-        path="/admin" 
-        element={
-          <ProtectedRoute allowedRoles={['owner', 'admin']}>
-            <AdminPanel />
-          </ProtectedRoute>
-        } 
-      />
+      {/* Protected Layout Loop */}
+      <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/admin" element={<AdminPanel />} />
+        {/* Placeholders for future modules */}
+        <Route path="/students" element={<Dashboard />} />
+        <Route path="/finance" element={<Dashboard />} />
+      </Route>
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
